@@ -20,25 +20,25 @@ const TEXTO_PASO: Record<PasoCaptura, string> = {
 };
  
 export function CapturaScreen() {
-  const { apodo, listo } = useApodo();
- 
+  const { apodo, usuarioId, listo } = useApodo();
+
   if (!listo) return <Estado cargando />;
   // Sin apodo no hay a nombre de quién guardar la captura.
   if (!apodo) return <FormularioApodo />;
-  return <Camara apodo={apodo} />;
+  return <Camara apodo={apodo} usuarioId={usuarioId ?? undefined} />;
 }
  
 // La vista solo dibuja lo que el ViewModel le entrega y le avisa de los
 // toques. Las únicas decisiones que toma son de interfaz: el permiso de
 // la cámara y a qué pantalla ir cuando la captura termina bien.
-function Camara({ apodo }: { apodo: string }) {
+function Camara({ apodo, usuarioId }: { apodo: string; usuarioId?: string }) {
   const camara = useRef<CameraView>(null);
   const [permiso, pedirPermiso] = useCameraPermissions();
  
   // Las pestañas siguen montadas aunque no se vean. Con esto, la cámara y
   // el acelerómetro se apagan cuando estás en otra pestaña.
   const enPantalla = useIsFocused();
-  const vm = useCapturaViewModel({ apodo, activo: enPantalla });
+  const vm = useCapturaViewModel({ apodo, usuarioId, activo: enPantalla });
  
   async function alCapturar() {
     const guardado = await vm.capturar(async () => {

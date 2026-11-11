@@ -1,16 +1,20 @@
 import { useCallback, useEffect, useState } from 'react';
- 
+
 import { avistamientosRepository } from '@/data/repositories/avistamientos-repository';
 import { perrosRepository } from '@/data/repositories/perros-repository';
 import type { Avistamiento } from '@/domain/models/avistamiento';
 import type { Perro } from '@/domain/models/perro';
- 
-export function usePerfilPerroViewModel(perroId: string, apodo: string | null) {
+
+export function usePerfilPerroViewModel(
+  perroId: string,
+  apodo: string | null,
+  usuarioId?: string | null,
+) {
   const [perro, setPerro] = useState<Perro | null>(null);
   const [avistamientos, setAvistamientos] = useState<Avistamiento[]>([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState<string | null>(null);
- 
+
   const cargar = useCallback(async () => {
     setCargando(true);
     setError(null);
@@ -27,7 +31,7 @@ export function usePerfilPerroViewModel(perroId: string, apodo: string | null) {
       setCargando(false);
     }
   }, [perroId]);
- 
+
   // La primera carga no reutiliza cargar(): esa función pone cargando en true
   // de forma síncrona, y llamar setState directo dentro de un efecto provoca
   // renders en cascada (ESLint lo marca). Además, la bandera "vigente" evita
@@ -49,11 +53,16 @@ export function usePerfilPerroViewModel(perroId: string, apodo: string | null) {
       vigente = false;
     };
   }, [perroId]);
- 
+
   // "Lo tengo" se decide aquí y no en la vista: es una regla del juego,
   // no una decisión de cómo dibujar.
-  const loTengo = avistamientos.some((a) => a.apodo === apodo);
- 
+  // Se evalúa por usuarioId del usuario autenticado (con fallback a apodo).
+  const loTengo = avistamientos.some(
+    (a) =>
+      (usuarioId && a.usuarioId === usuarioId) ||
+      (apodo !== null && a.apodo === apodo),
+  );
+
   return {
     perro,
     avistamientos,
@@ -61,7 +70,9 @@ export function usePerfilPerroViewModel(perroId: string, apodo: string | null) {
     descripcion: loTengo
       ? (perro?.descripcion ?? '')
       : 'Captúralo para leer su ficha completa.',
-    esMio: (avistamiento: Avistamiento) => avistamiento.apodo === apodo,
+    esMio: (avistamiento: Avistamiento) =>
+      (usuarioId && avistamiento.usuarioId === usuarioId) ||
+      (apodo !== null && avistamiento.apodo === apodo),
     cargando,
     error,
     recargar: cargar,

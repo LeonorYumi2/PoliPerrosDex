@@ -1,36 +1,42 @@
 import { router } from 'expo-router';
 import { FlatList, Pressable, StyleSheet, View } from 'react-native';
- 
+
 import { useApodo } from '@/ui/core/apodo-view-model';
 import { Estado } from '@/ui/core/estado';
 import { FormularioApodo } from '@/ui/core/formulario-apodo';
 import { colores, espacio } from '@/ui/core/tema';
 import { Texto } from '@/ui/core/texto';
- 
+
 import { TarjetaPerro } from './tarjeta-perro';
 import { usePokedexViewModel } from './use-pokedex-view-model';
- 
+
 // La pantalla se parte en dos porque un hook no puede llamarse de forma
-// condicional: primero vemos si hay apodo y solo entonces creamos el
-// ViewModel, que necesita ese apodo para consultar.
+// condicional: primero verificamos si hay sesión de entrenador y solo entonces creamos el
+// ViewModel con sus identificadores.
 export function PokedexScreen() {
-  const { apodo, listo } = useApodo();
- 
+  const { apodo, usuarioId, listo } = useApodo();
+
   if (!listo) return <Estado cargando />;
   if (!apodo) return <FormularioApodo />;
-  return <ListaPokedex apodo={apodo} />;
+  return <ListaPokedex apodo={apodo} usuarioId={usuarioId ?? undefined} />;
 }
- 
-function ListaPokedex({ apodo }: { apodo: string }) {
-  const { olvidarApodo } = useApodo();
-  const vm = usePokedexViewModel(apodo);
- 
+
+function ListaPokedex({
+  apodo,
+  usuarioId,
+}: {
+  apodo: string;
+  usuarioId?: string;
+}) {
+  const { cerrarSesion } = useApodo();
+  const vm = usePokedexViewModel(apodo, usuarioId);
+
   if (vm.cargando || (vm.error && vm.perros.length === 0)) {
     return (
       <Estado cargando={vm.cargando} error={vm.error} onReintentar={vm.recargar} />
     );
   }
- 
+
   return (
     <FlatList
       data={vm.perros}
@@ -41,9 +47,9 @@ function ListaPokedex({ apodo }: { apodo: string }) {
         <View style={estilos.cabecera}>
           <Texto variante="nota">Entrenador: {apodo}</Texto>
           <Texto variante="subtitulo">{vm.resumen}</Texto>
-          <Pressable onPress={olvidarApodo} hitSlop={8}>
+          <Pressable onPress={cerrarSesion} hitSlop={8}>
             <Texto variante="nota" style={estilos.enlace}>
-              Cambiar apodo
+              Cerrar sesión
             </Texto>
           </Pressable>
         </View>
@@ -60,7 +66,7 @@ function ListaPokedex({ apodo }: { apodo: string }) {
     />
   );
 }
- 
+
 const estilos = StyleSheet.create({
   lista: { padding: espacio.m },
   cabecera: { gap: espacio.xs, marginBottom: espacio.m },

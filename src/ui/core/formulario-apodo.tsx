@@ -1,75 +1,119 @@
-import { useState } from 'react';
-import { StyleSheet, TextInput, View } from 'react-native';
- 
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
+
 import { useApodo } from './apodo-view-model';
 import { Boton } from './boton';
-import { colores, espacio, radio } from './tema';
+import { colores, espacio, fuentes, radio } from './tema';
 import { Texto } from './texto';
- 
-// Mismas reglas que el CHECK de la tabla avistamientos. Validar aquí no
-// sobra: la app da un mensaje claro y la base de datos protege los datos
-// si alguien llama a la API sin pasar por la app.
-function validarApodo(texto: string): string | null {
-  const apodo = texto.trim();
-  if (apodo.length < 3) return 'El apodo debe tener al menos 3 caracteres';
-  if (apodo.length > 20) return 'El apodo no puede pasar de 20 caracteres';
-  if (!/^[a-zA-Z0-9_ñÑáéíóúÁÉÍÓÚ-]+$/.test(apodo)) {
-    return 'Usa solo letras, números, guion o guion bajo (sin espacios)';
-  }
-  return null;
-}
- 
+
 export function FormularioApodo() {
-  const { guardarApodo } = useApodo();
-  const [texto, setTexto] = useState('');
-  const [error, setError] = useState<string | null>(null);
- 
-  function confirmar() {
-    const problema = validarApodo(texto);
-    if (problema) {
-      setError(problema);
-      return;
-    }
-    guardarApodo(texto);
-  }
- 
+  const { iniciarSesionConGoogle, cargando, error } = useApodo();
+
   return (
-    <View style={estilos.caja}>
-      <Texto variante="subtitulo">¿Cómo te llamamos?</Texto>
-      <Texto variante="nota">
-        Tus capturas quedan a nombre de este apodo. No hay contraseña, así que
-        cualquiera podría usar el mismo: por eso más adelante vendrá el login.
-      </Texto>
-      <TextInput
-        value={texto}
-        onChangeText={(valor) => {
-          setTexto(valor);
-          setError(null);
-        }}
-        placeholder="ej. cazadora_23"
-        placeholderTextColor={colores.tintaSuave}
-        autoCapitalize="none"
-        autoCorrect={false}
-        maxLength={20}
-        style={estilos.campo}
-        onSubmitEditing={confirmar}
-      />
-      {error && <Texto style={{ color: colores.alerta }}>{error}</Texto>}
-      <Boton titulo="Empezar a capturar" onPress={confirmar} />
+    <View style={estilos.contenedor}>
+      <View style={estilos.tarjeta}>
+        <View style={estilos.iconoContenedor}>
+          <MaterialCommunityIcons name="paw" size={44} color={colores.terracota} />
+        </View>
+
+        <Texto variante="titulo" style={estilos.titulo}>
+          PoliPerrosDex
+        </Texto>
+
+        <Texto variante="subtitulo" style={estilos.subtitulo}>
+          ¡Bienvenido, Entrenador!
+        </Texto>
+
+        <Texto variante="nota" style={estilos.descripcion}>
+          Para registrar y sincronizar tus capturas de los perros del campus
+          con tu cuenta personal, inicia sesión con Google a través de Supabase Auth.
+        </Texto>
+
+        {error && (
+          <View style={estilos.cajaError}>
+            <MaterialCommunityIcons
+              name="alert-circle-outline"
+              size={18}
+              color={colores.alerta}
+            />
+            <Texto style={estilos.textoError}>{error}</Texto>
+          </View>
+        )}
+
+        {cargando ? (
+          <View style={estilos.cargandoContenedor}>
+            <ActivityIndicator size="small" color={colores.terracota} />
+            <Texto variante="nota">Conectando con Google…</Texto>
+          </View>
+        ) : (
+          <Boton
+            titulo="Iniciar sesión con Google"
+            onPress={iniciarSesionConGoogle}
+          />
+        )}
+      </View>
     </View>
   );
 }
- 
+
 const estilos = StyleSheet.create({
-  caja: { gap: espacio.m, padding: espacio.l },
-  campo: {
-    borderWidth: 1.5,
-    borderColor: colores.tinta,
-    borderRadius: radio,
-    paddingHorizontal: espacio.m,
-    minHeight: 48,
-    fontSize: 16,
-    color: colores.tinta,
+  contenedor: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: espacio.l,
+    backgroundColor: colores.papel,
+  },
+  tarjeta: {
     backgroundColor: colores.blanco,
+    borderRadius: radio * 2,
+    borderWidth: 1.5,
+    borderColor: colores.linea,
+    padding: espacio.l,
+    gap: espacio.m,
+    alignItems: 'center',
+  },
+  iconoContenedor: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    backgroundColor: colores.papelHondo,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: espacio.xs,
+  },
+  titulo: {
+    fontFamily: fuentes.titulo,
+    textAlign: 'center',
+  },
+  subtitulo: {
+    textAlign: 'center',
+  },
+  descripcion: {
+    textAlign: 'center',
+    lineHeight: 20,
+    color: colores.tintaSuave,
+  },
+  cajaError: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: espacio.xs,
+    backgroundColor: '#FDF2F0',
+    borderWidth: 1,
+    borderColor: colores.alerta,
+    borderRadius: radio,
+    padding: espacio.s,
+    width: '100%',
+  },
+  textoError: {
+    color: colores.alerta,
+    flex: 1,
+    fontSize: 13,
+  },
+  cargandoContenedor: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: espacio.s,
+    paddingVertical: espacio.m,
   },
 });

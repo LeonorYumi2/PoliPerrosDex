@@ -15,8 +15,8 @@ export function PerfilPerroScreen() {
   // Leer el id de la URL es trabajo de la vista: el ViewModel recibe
   // el dato ya resuelto y no sabe nada de rutas.
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { apodo } = useApodo();
-  const vm = usePerfilPerroViewModel(id, apodo);
+  const { apodo, usuarioId } = useApodo();
+  const vm = usePerfilPerroViewModel(id, apodo, usuarioId);
  
   if (!vm.perro) {
     return (
