@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "architecture",
+  "quality": "showcase",
+  "specification": {
+    "path": "C:\\Users\\APP MOVILES\\Documents\\PoliPerrosDex\\.archify\\architecture-runtime-poliperrosdex-20261111-155211\\candidate.json",
+    "sha256": "a494ea6d36eaddd39d7a288b90c022b94a4b26c3f2f81d38c3f1bd6decbc8929",
+    "bytes": 6158
+  },
+  "artifact": {
+    "path": "C:\\Users\\APP MOVILES\\Documents\\PoliPerrosDex\\.archify\\architecture-runtime-poliperrosdex-20261111-155211\\architecture-runtime-poliperrosdex.html",
+    "sha256": "f9aaebe3f5fe6c479d4f89a47fa30e4d5d3d5dfd5468a13c7a3176502b87415d",
+    "bytes": 860427
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "C:\\Users\\APP MOVILES\\Documents\\PoliPerrosDex\\.archify\\architecture-runtime-poliperrosdex-20261111-155211\\review-2\\architecture-runtime-poliperrosdex.finalize.json",
+    "summaryReceipt": "C:\\Users\\APP MOVILES\\Documents\\PoliPerrosDex\\.archify\\architecture-runtime-poliperrosdex-20261111-155211\\review-2\\architecture-runtime-poliperrosdex.finalize-summary.json",
+    "browserCheckReceipt": "C:\\Users\\APP MOVILES\\Documents\\PoliPerrosDex\\.archify\\architecture-runtime-poliperrosdex-20261111-155211\\review-2\\architecture-runtime-poliperrosdex.browser-check.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-11-11T20:56:22.667Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 7323,
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  },
+  "visualReviewRecommendation": {
+    "action": "inspect-route-readability",
+    "signals": {
+      "resolvedCrossovers": 1,
+      "routesOverSuggestedBends": 1
+    },
+    "reason": "Automated gates passed, but crossings or detours still need perceptual review before claiming visual quality.",
+    "affectedRoutes": {
+      "crossings": [
+        {
+          "left": {
+            "id": "app-to-map",
+            "from": "app-shell",
+            "to": "map",
+            "label": "abre",
+            "collectionIndex": 3,
+            "artifactIndex": 4
+          },
+          "right": {
+            "id": "capture-to-device-apis",
+            "from": "capture",
+            "to": "device-apis",
+            "label": "API",
+            "collectionIndex": 9,
+            "artifactIndex": 10
+          },
+          "point": [
+            396,
+            431
+          ]
+        }
+      ],
+      "detours": [
+        {
+          "relationship": {
+            "id": "app-to-trainer-repository",
+            "from": "app-shell",
+            "to": "trainer-repository",
+            "label": "restaura / guarda apodo",
+            "collectionIndex": 4,
+            "artifactIndex": 5
+          },
+          "bends": 3,
+          "stretch": 1.15
+        }
+      ],
+      "truncated": false
+    },
+    "hints": [
+      "app-shell → map crosses capture → device-apis: move the node of whichever is a branch, return, or second entrance to the other side of the main path, so that relationship runs through an empty corridor.",
+      "app-shell → trainer-repository needs 3 bends: move node app-shell or trainer-repository so they share a row or column with matching centers, or sit diagonally with a clear corner."
+    ],
+    "repair": "Trace these relationships at the desktop viewport. For Architecture, use references/architecture-layout-repair.md: reflow a blocked main path or tangled connected scene, and repair an isolated defect locally only when the surrounding composition is accepted. Preserve all semantic content and user-fixed geometry. Rerun finalize once after the edit."
+  }
+}

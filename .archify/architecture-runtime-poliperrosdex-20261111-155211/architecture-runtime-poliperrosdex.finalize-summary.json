@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "architecture",
+  "quality": "showcase",
+  "specification": {
+    "path": "C:\\Users\\APP MOVILES\\Documents\\PoliPerrosDex\\.archify\\architecture-runtime-poliperrosdex-20261111-155211\\candidate.json",
+    "sha256": "20ce3f71925709388aa2ebb0a91fbaf5ae12d17d4200c03aeb14b4ea1e7da6c9",
+    "bytes": 6158
+  },
+  "artifact": {
+    "path": "C:\\Users\\APP MOVILES\\Documents\\PoliPerrosDex\\.archify\\architecture-runtime-poliperrosdex-20261111-155211\\architecture-runtime-poliperrosdex.html",
+    "sha256": "f4acc7b70bb6fe2e0f987a28565c232a732f02daa0f9a6518f508bbc64bbc708",
+    "bytes": 860210
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "C:\\Users\\APP MOVILES\\Documents\\PoliPerrosDex\\.archify\\architecture-runtime-poliperrosdex-20261111-155211\\architecture-runtime-poliperrosdex.finalize.json",
+    "summaryReceipt": "C:\\Users\\APP MOVILES\\Documents\\PoliPerrosDex\\.archify\\architecture-runtime-poliperrosdex-20261111-155211\\architecture-runtime-poliperrosdex.finalize-summary.json",
+    "browserCheckReceipt": "C:\\Users\\APP MOVILES\\Documents\\PoliPerrosDex\\.archify\\architecture-runtime-poliperrosdex-20261111-155211\\architecture-runtime-poliperrosdex.browser-check.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-11-11T20:56:22.667Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 9175,
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  },
+  "visualReviewRecommendation": {
+    "action": "inspect-route-readability",
+    "signals": {
+      "resolvedCrossovers": 2
+    },
+    "reason": "Automated gates passed, but crossings or detours still need perceptual review before claiming visual quality.",
+    "affectedRoutes": {
+      "crossings": [
+        {
+          "left": {
+            "id": "map-to-repositories",
+            "from": "map",
+            "to": "repositories",
+            "label": "lee",
+            "collectionIndex": 8,
+            "artifactIndex": 9
+          },
+          "right": {
+            "id": "capture-to-device-apis",
+            "from": "capture",
+            "to": "device-apis",
+            "label": "API",
+            "collectionIndex": 9,
+            "artifactIndex": 10
+          },
+          "point": [
+            666,
+            399.25
+          ]
+        },
+        {
+          "left": {
+            "id": "capture-to-device-apis",
+            "from": "capture",
+            "to": "device-apis",
+            "label": "API",
+            "collectionIndex": 9,
+            "artifactIndex": 10
+          },
+          "right": {
+            "id": "map-to-storage",
+            "from": "map",
+            "to": "storage",
+            "label": "fotos por URL pública",
+            "collectionIndex": 13,
+            "artifactIndex": 14
+          },
+          "point": [
+            735,
+            469.5
+          ]
+        }
+      ],
+      "detours": [],
+      "truncated": false
+    },
+    "hints": [
+      "map → repositories crosses capture → device-apis: move the node of whichever is a branch, return, or second entrance to the other side of the main path, so that relationship runs through an empty corridor.",
+      "capture → device-apis crosses map → storage: move the node of whichever is a branch, return, or second entrance to the other side of the main path, so that relationship runs through an empty corridor."
+    ],
+    "repair": "Trace these relationships at the desktop viewport. For Architecture, use references/architecture-layout-repair.md: reflow a blocked main path or tangled connected scene, and repair an isolated defect locally only when the surrounding composition is accepted. Preserve all semantic content and user-fixed geometry. Rerun finalize once after the edit."
+  }
+}

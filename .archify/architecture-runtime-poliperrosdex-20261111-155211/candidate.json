@@ -1,0 +1,248 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Arquitectura de runtime · PoliperrosDex",
+    "locale": "es",
+    "output": ".archify/architecture-runtime-poliperrosdex-20261111-155211/architecture-runtime-poliperrosdex.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "person",
+      "type": "external",
+      "label": "Entrenador",
+      "sublabel": "Persona usuaria",
+      "icon": "person",
+      "pos": [30, 300],
+      "size": [120, 72]
+    },
+    {
+      "id": "app-shell",
+      "type": "frontend",
+      "label": "Shell de la app",
+      "sublabel": "Expo Router · contexto de apodo",
+      "pos": [190, 255],
+      "size": [165, 100]
+    },
+    {
+      "id": "catalog",
+      "type": "frontend",
+      "label": "Pokédex + perfil",
+      "sublabel": "Listado, detalle y capturas",
+      "pos": [420, 75],
+      "size": [170, 95]
+    },
+    {
+      "id": "capture",
+      "type": "frontend",
+      "label": "Capturar",
+      "sublabel": "Foto → GPS → registro",
+      "pos": [420, 245],
+      "size": [170, 95]
+    },
+    {
+      "id": "map",
+      "type": "frontend",
+      "label": "Mapa",
+      "sublabel": "WebView · Leaflet",
+      "pos": [420, 415],
+      "size": [170, 95]
+    },
+    {
+      "id": "trainer-repository",
+      "type": "backend",
+      "label": "Repositorio de entrenador",
+      "sublabel": "Lee / escribe el apodo",
+      "pos": [190, 555],
+      "size": [175, 75]
+    },
+    {
+      "id": "local-file",
+      "type": "database",
+      "label": "Archivo local",
+      "sublabel": "Documents/apodo.txt",
+      "pos": [190, 690],
+      "size": [175, 72]
+    },
+    {
+      "id": "repositories",
+      "type": "backend",
+      "label": "Repositorios de dominio",
+      "sublabel": "Perros · avistamientos",
+      "pos": [650, 255],
+      "size": [170, 100]
+    },
+    {
+      "id": "device-apis",
+      "type": "backend",
+      "label": "Módulos Expo",
+      "sublabel": "Camera · Location · Sensors",
+      "pos": [190, 440],
+      "size": [170, 95]
+    },
+    {
+      "id": "supabase-client",
+      "type": "backend",
+      "label": "Cliente Supabase",
+      "sublabel": "SDK · EXPO_PUBLIC_*",
+      "pos": [850, 255],
+      "size": [160, 95]
+    },
+    {
+      "id": "postgres",
+      "type": "database",
+      "label": "Supabase Postgres",
+      "sublabel": "perros · avistamientos",
+      "pos": [1050, 150],
+      "size": [150, 90]
+    },
+    {
+      "id": "storage",
+      "type": "cloud",
+      "label": "Supabase Storage",
+      "sublabel": "bucket poliperrodex · fotos",
+      "pos": [1050, 360],
+      "size": [150, 90]
+    },
+    {
+      "id": "osm",
+      "type": "external",
+      "label": "OpenStreetMap",
+      "sublabel": "Mosaicos HTTPS",
+      "pos": [420, 690],
+      "size": [180, 72]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Runtime móvil · Expo / React Native",
+      "wraps": [
+        "app-shell",
+        "catalog",
+        "capture",
+        "map",
+        "trainer-repository",
+        "repositories",
+        "device-apis",
+        "supabase-client"
+      ],
+      "pad": 22
+    }
+  ],
+  "connections": [
+    {
+      "id": "person-to-app",
+      "from": "person",
+      "to": "app-shell",
+      "variant": "emphasis"
+    },
+    {
+      "id": "app-to-catalog",
+      "from": "app-shell",
+      "to": "catalog",
+      "label": "abre"
+    },
+    {
+      "id": "app-to-capture",
+      "from": "app-shell",
+      "to": "capture",
+      "label": "abre"
+    },
+    {
+      "id": "app-to-map",
+      "from": "app-shell",
+      "to": "map",
+      "label": "abre"
+    },
+    {
+      "id": "app-to-trainer-repository",
+      "from": "app-shell",
+      "to": "trainer-repository",
+      "label": "restaura / guarda apodo"
+    },
+    {
+      "id": "trainer-repository-to-file",
+      "from": "trainer-repository",
+      "to": "local-file",
+      "label": "I/O"
+    },
+    {
+      "id": "catalog-to-repositories",
+      "from": "catalog",
+      "to": "repositories",
+      "label": "lee"
+    },
+    {
+      "id": "capture-to-repositories",
+      "from": "capture",
+      "to": "repositories",
+      "label": "datos"
+    },
+    {
+      "id": "map-to-repositories",
+      "from": "map",
+      "to": "repositories",
+      "label": "lee"
+    },
+    {
+      "id": "capture-to-device-apis",
+      "from": "capture",
+      "to": "device-apis",
+      "label": "API"
+    },
+    {
+      "id": "repositories-to-supabase",
+      "from": "repositories",
+      "to": "supabase-client"
+    },
+    {
+      "id": "supabase-to-postgres",
+      "from": "supabase-client",
+      "to": "postgres"
+    },
+    {
+      "id": "supabase-to-storage",
+      "from": "supabase-client",
+      "to": "storage"
+    },
+    {
+      "id": "map-to-storage",
+      "from": "map",
+      "to": "storage",
+      "label": "fotos por URL pública"
+    },
+    {
+      "id": "map-to-osm",
+      "from": "map",
+      "to": "osm",
+      "label": "mosaicos del mapa"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "Captura y persistencia",
+      "items": [
+        "El ViewModel encadena foto, ubicación y registro. El repositorio sube la imagen a Storage antes de insertar el avistamiento.",
+        "Una caída detectada cancela la captura en curso; el acelerómetro se escucha solo mientras la pestaña está enfocada."
+      ]
+    },
+    {
+      "dot": "slate",
+      "title": "Identidad y mapa",
+      "items": [
+        "No hay inicio de sesión: el apodo del entrenador se conserva en un archivo del dispositivo.",
+        "El mapa se compone en un WebView con Leaflet; los mosaicos proceden de OpenStreetMap."
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Alcance de evidencia",
+      "items": [
+        "Diagrama basado en el estado de trabajo local; los archivos fuente no están anclados a un remoto ni a una revisión de Git."
+      ]
+    }
+  ]
+}
